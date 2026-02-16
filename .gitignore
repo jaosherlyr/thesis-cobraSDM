@@ -1,0 +1,27 @@
+# Virtual environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Data folders (SDM heavy files)
+data/raw/
+data/shapefiles/
+data/cleaned/
+data/geocode/
+
+# Large geospatial formats
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.tif
+*.tiff
+*.gpkg
+*.geojson
