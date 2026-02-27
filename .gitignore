@@ -15,7 +15,9 @@ data/shapefiles/
 data/cleaned/
 data/geocode/
 data/daily_time_grid.csv
-data/redistributed_counts.csv
+data/env
+data/environmental_data_clean.csv
+data/redistributed_counts_clean.csv
 
 # Large geospatial formats
 *.shp

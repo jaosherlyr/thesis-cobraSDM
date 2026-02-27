@@ -1,63 +1,110 @@
 #!/usr/bin/env python3
-"""
-merge_csv.py
-
-Purpose:
-- Merge multiple CSV files into one
-- Require columns: date, species, lat, long
-- Preserve rows exactly (no transformation)
-- Fail if any input CSV is missing required columns
-
-Usage:
-    python merge_csv.py output.csv input1.csv input2.csv ...
-"""
-
+import os
+import glob
 import sys
-import pandas as pd
 
-REQUIRED_COLUMNS = ["date", "species", "lat", "long"]
+# ==========================================
+# CONFIGURATION (EDIT HERE)
+# ==========================================
+
+# Option 1: Explicit file list (in exact order you want)
+input_files = [
+    "data/env/Barangay_Daily_Env_2022_1.csv",
+    "data/env/Barangay_Daily_Env_2022_2.csv",
+    "data/env/Barangay_Daily_Env_2022_3.csv",
+    "data/env/Barangay_Daily_Env_2022_4.csv",
+    "data/env/Barangay_Daily_Env_2022_5.csv",
+    "data/env/Barangay_Daily_Env_2022_6.csv",
+    "data/env/Barangay_Daily_Env_2022_7.csv",
+    "data/env/Barangay_Daily_Env_2022_8.csv",
+    "data/env/Barangay_Daily_Env_2022_9.csv",
+    "data/env/Barangay_Daily_Env_2022_10.csv",
+    "data/env/Barangay_Daily_Env_2022_11.csv",
+    "data/env/Barangay_Daily_Env_2022_12.csv",
+    "data/env/Barangay_Daily_Env_2023_1.csv",
+    "data/env/Barangay_Daily_Env_2023_2.csv",
+    "data/env/Barangay_Daily_Env_2023_3.csv",
+    "data/env/Barangay_Daily_Env_2023_4.csv",
+    "data/env/Barangay_Daily_Env_2023_5.csv",
+    "data/env/Barangay_Daily_Env_2023_6.csv",
+    "data/env/Barangay_Daily_Env_2023_7.csv",
+    "data/env/Barangay_Daily_Env_2023_8.csv",
+    "data/env/Barangay_Daily_Env_2023_9.csv",
+    "data/env/Barangay_Daily_Env_2023_10.csv",
+    "data/env/Barangay_Daily_Env_2023_11.csv",
+    "data/env/Barangay_Daily_Env_2023_12.csv",
+    "data/env/Barangay_Daily_Env_2024_1.csv",
+    "data/env/Barangay_Daily_Env_2024_2.csv",
+    "data/env/Barangay_Daily_Env_2024_3.csv",
+    "data/env/Barangay_Daily_Env_2024_4.csv",
+    "data/env/Barangay_Daily_Env_2024_5.csv",
+    "data/env/Barangay_Daily_Env_2024_6.csv",
+    "data/env/Barangay_Daily_Env_2024_7.csv",
+    "data/env/Barangay_Daily_Env_2024_8.csv",
+    "data/env/Barangay_Daily_Env_2024_9.csv",
+    "data/env/Barangay_Daily_Env_2024_10.csv",
+    "data/env/Barangay_Daily_Env_2024_11.csv",
+    "data/env/Barangay_Daily_Env_2024_12.csv",
+    "data/env/Barangay_Daily_Env_2025_1.csv",
+    "data/env/Barangay_Daily_Env_2025_2.csv",
+    "data/env/Barangay_Daily_Env_2025_3.csv",
+    "data/env/Barangay_Daily_Env_2025_4.csv",
+    "data/env/Barangay_Daily_Env_2025_5.csv",
+    "data/env/Barangay_Daily_Env_2025_6.csv",
+    "data/env/Barangay_Daily_Env_2025_7.csv",
+    "data/env/Barangay_Daily_Env_2025_8.csv",
+    "data/env/Barangay_Daily_Env_2025_9.csv",
+    "data/env/Barangay_Daily_Env_2025_10.csv",
+    "data/env/Barangay_Daily_Env_2025_11.csv",
+    "data/env/Barangay_Daily_Env_2025_12.csv",
+    "data/env/Barangay_Daily_Env_2026_1.csv",
+]
+
+# Option 2: Folder mode (comment out input_files above if using this)
+# input_folder = "/path/to/folder_containing_csvs"
+
+output_file = "data/environmental_data.csv"
+
+# ==========================================
+# DO NOT EDIT BELOW
+# ==========================================
+
+def get_csv_files():
+    if input_files:
+        return input_files
+
+    # If using folder mode
+    if 'input_folder' in globals():
+        files = sorted(glob.glob(os.path.join(input_folder, "*.csv")))
+        return files
+
+    print("No input files or folder defined.")
+    sys.exit(1)
 
 
-def main(output_csv, input_csvs):
-    all_frames = []
+def merge_csv(files, output_path):
+    if not files:
+        print("No files found.")
+        sys.exit(1)
 
-    for path in input_csvs:
-        try:
-            df = pd.read_csv(path)
-        except Exception as e:
-            raise RuntimeError(f"❌ Failed to read '{path}': {e}")
+    print("Merging in this order:")
+    for f in files:
+        print(" -", f)
 
-        missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
-        if missing:
-            raise ValueError(
-                f"❌ '{path}' is missing required columns: {missing}"
-            )
+    with open(output_path, "wb") as outfile:
+        for i, file_path in enumerate(files):
+            with open(file_path, "rb") as infile:
+                if i == 0:
+                    # Write entire first file (including header)
+                    outfile.write(infile.read())
+                else:
+                    # Skip first line (header) safely
+                    infile.readline()
+                    outfile.write(infile.read())
 
-        # Keep ONLY required columns (order enforced)
-        df = df[REQUIRED_COLUMNS]
-
-        all_frames.append(df)
-        print(f"✅ Loaded {len(df)} rows from {path}")
-
-    if not all_frames:
-        raise RuntimeError("❌ No input CSVs provided")
-
-    merged = pd.concat(all_frames, ignore_index=True)
-    merged.to_csv(output_csv, index=False)
-
-    print(f"\n✅ Combined CSV saved to: {output_csv}")
-    print(f"📊 Total rows merged: {len(merged)}")
+    print(f"\nMerge complete → {output_path}")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print(
-            "Usage:\n"
-            "  python merge_sightings.py output.csv input1.csv input2.csv ..."
-        )
-        sys.exit(1)
-
-    output_csv = sys.argv[1]
-    input_csvs = sys.argv[2:]
-
-    main(output_csv, input_csvs)
+    files = get_csv_files()
+    merge_csv(files, output_file)
