@@ -17,6 +17,7 @@ data/geocode/
 data/daily_time_grid.csv
 data/env
 data/model_dataset.csv
+data/sequence/
 
 # Large geospatial formats
 *.shp
