@@ -1,0 +1,4 @@
+Species,Correlation (1-day vs 7-day HSI),Mean Difference (7-day - 1-day)
+Naja_philippinensis,0.8043938629515397,0.03547062139442302
+Naja_samarensis,0.8845096264511859,0.11422819147914799
+Ophiophagus_hannah,0.9188800077616509,0.2998828941402421

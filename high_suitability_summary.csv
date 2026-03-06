@@ -1,0 +1,7 @@
+Species,Forecast Horizon,Total Barangays,High Suitability (HSI ≥ 0.6),Percentage (%)
+Naja_philippinensis,1day,669,10,1.4947683109118086
+Naja_philippinensis,7day,669,38,5.680119581464873
+Naja_samarensis,1day,669,5,0.7473841554559043
+Naja_samarensis,7day,669,10,1.4947683109118086
+Ophiophagus_hannah,1day,669,3,0.4484304932735426
+Ophiophagus_hannah,7day,669,35,5.23168908819133
