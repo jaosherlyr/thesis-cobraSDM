@@ -22,8 +22,8 @@ for sp in species_list:
         print(f"\nEvaluating {sp} - {horizon}")
         
         # Load sequences
-        X = np.load(f"data/sequence_multi/X_{sp}_{horizon}.npy")
-        y = np.load(f"data/sequence_multi/y_{sp}_{horizon}.npy")
+        X = np.load(f"../data/sequence_multi/X_{sp}_{horizon}.npy")
+        y = np.load(f"../data/sequence_multi/y_{sp}_{horizon}.npy")
         
         # Chronological split (same as training)
         split_index = int(len(X) * 0.8)
@@ -32,7 +32,7 @@ for sp in species_list:
         
         # Load trained model
         model = tf.keras.models.load_model(
-            f"models_multi/{sp}_{horizon}.keras"
+            f"../models_multi/{sp}_{horizon}.keras"
         )
         
         # Predict
